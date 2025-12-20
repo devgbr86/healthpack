@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+     <meta charset="UTF-8" />
+     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+     <!-- SEO -->
+     <meta name="description"
+          content="Dra. Ana Paula Nutrição - Nutricionista clínica especializada em emagrecimento, nutrição esportiva e saúde metabólica. Atendimento personalizado em Belo Horizonte." />
+     <meta name="keywords"
+          content="nutricionista, nutrição clínica, emagrecimento, dieta, nutrição esportiva, consultório belo horizonte, nutri bh" />
+     <meta name="author" content="Dra. Ana Paula Nutrição" />
+
+     <!-- Open Graph -->
+     <meta property="og:title" content="Dra. Ana Paula - Nutricionista Clínica" />
+     <meta property="og:description"
+          content="Transforme sua relação com a comida através de um acompanhamento nutricional personalizado e humanizado" />
+     <meta property="og:type" content="website" />
+     <meta property="og:url" content="https://draanapaula.com.br" />
+     <meta property="og:image" content="https://draanapaula.com.br/assets/img/og-image.jpg" />
+
+     <!-- Twitter Card -->
+     <meta name="twitter:card" content="summary_large_image" />
+     <meta name="twitter:title" content="Dra. Ana Paula - Nutricionista Clínica" />
+     <meta name="twitter:description"
+          content="Transforme sua relação com a comida através de um acompanhamento nutricional personalizado e humanizado" />
+
+     <title>Dra. Ana Paula - Nutricionista Clínica</title>
+     <link rel="icon" href="./assets/icons/coffee.svg" type="image/svg+xml" />
+
+     <!-- Preconnect -->
+     <link rel="preconnect" href="https://fonts.googleapis.com" />
+     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+     <link rel="preconnect" href="https://unpkg.com" />
+
+     <!-- Roboto Mono Font -->
+     <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+
+     <!-- AOS Animations -->
+     <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css" />
+
+     <!-- Alpine.js -->
+     <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.x.x/dist/cdn.min.js"></script>
+     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+     <!-- CSS customizado -->
+     <link rel="stylesheet" href="./style.css" />
+</head>
+
+<body x-data="{ showScrollTop: false }" @scroll.window="showScrollTop = (window.scrollY > 300)">
+
+     <!-- Header / Navbar -->
+     <header>
+          <nav>
+               <img src="./assets/icons/coffee.svg" alt="Logo Dra. Ana Paula" />
+               <div class="page-links">
+                    <a href="#sobre">Sobre</a>
+                    <a href="#areas">Especialidades</a>
+                    <a href="#contato">Contato</a>
+               </div>
+          </nav>
+     </header>
+
+     <!-- Main Content -->
+     <main id="content">
+
+          <!-- HERO / SOBRE -->
+          <section id="sobre" data-aos="fade-up">
+               <img src="./assets/img/img01.avif" class="section-avatar" alt="Dra. Ana Paula Nutricionista"
+                    loading="lazy">
+               <h1>DRA. ANA PAULA NUTRIÇÃO</h1>
+
+               <p>
+                    Sou <strong>nutricionista clínica</strong> com mais de 10 anos de experiência,
+                    especializada em <strong>emagrecimento saudável, nutrição esportiva e saúde metabólica</strong>.
+               </p>
+
+               <p>
+                    Minha missão é ajudar você a transformar sua relação com a comida através de um
+                    acompanhamento nutricional personalizado, humanizado e baseado em evidências científicas.
+                    Acredito que cada pessoa é única e merece um plano alimentar que respeite suas necessidades,
+                    preferências e estilo de vida.
+               </p>
+
+               <p>
+                    <strong>Atendimento:</strong> Segunda a Sexta, das 08:00 às 19:00 | Consultas presenciais e online
+               </p>
+
+               <div class="tech-badges">
+                    <span class="badge">10+ Anos de Experiência</span>
+                    <span class="badge">800+ Pacientes Atendidos</span>
+                    <span class="badge">CRN-6 12345</span>
+                    <span class="badge">Atendimento Humanizado</span>
+               </div>
+          </section>
+
+          <!-- ÁREAS DE ATUAÇÃO -->
+          <section id="areas" data-aos="fade-up" data-aos-delay="200">
+               <img src="./assets/img/img02.avif" class="section-avatar" alt="Especialidades Nutricionais"
+                    loading="lazy">
+
+               <h1>ESPECIALIDADES</h1>
+
+               <div x-data="{ activeCategory: 1 }" class="accordion">
+
+                    <!-- Categoria 1: Emagrecimento -->
+                    <div class="accordion-item">
+                         <button @click="activeCategory = activeCategory === 1 ? null : 1" class="accordion-header">
+                              <span>
+                                   <img src="./assets/icons/code.svg" class="icon" alt="">
+                                   Emagrecimento Saudável
+                              </span>
+                              <span x-text="activeCategory === 1 ? '−' : '+'"></span>
+                         </button>
+                         <div x-show="activeCategory === 1" x-collapse class="accordion-content">
+                              <p>
+                                   Programa de emagrecimento personalizado que vai além da balança, focando em
+                                   saúde, bem-estar e mudanças de hábitos sustentáveis a longo prazo.
+                              </p>
+
+                              <p class="content-title">O que inclui:</p>
+                              <ul>
+                                   <li><strong>Avaliação Completa</strong> - Análise de composição corporal, exames e
+                                        histórico</li>
+                                   <li><strong>Plano Alimentar Individualizado</strong> - Cardápio personalizado e
+                                        flexível</li>
+                                   <li><strong>Reeducação Alimentar</strong> - Estratégias práticas para o dia a dia
+                                   </li>
+                                   <li><strong>Acompanhamento Contínuo</strong> - Consultas de retorno e ajustes
+                                        necessários</li>
+                                   <li><strong>Educação Nutricional</strong> - Aprenda a fazer escolhas conscientes</li>
+                                   <li><strong>Suporte Emocional</strong> - Trabalho com comportamento alimentar</li>
+                              </ul>
+                         </div>
+                    </div>
+
+                    <!-- Categoria 2: Nutrição Esportiva -->
+                    <div class="accordion-item">
+                         <button @click="activeCategory = activeCategory === 2 ? null : 2" class="accordion-header">
+                              <span>
+                                   <img src="./assets/icons/code.svg" class="icon" alt="">
+                                   Nutrição Esportiva
+                              </span>
+                              <span x-text="activeCategory === 2 ? '−' : '+'"></span>
+                         </button>
+                         <div x-show="activeCategory === 2" x-collapse class="accordion-content">
+                              <p>
+                                   Otimize seu desempenho físico através da nutrição adequada, seja você atleta
+                                   profissional ou praticante de atividade física regular.
+                              </p>
+
+                              <p class="content-title">O que inclui:</p>
+                              <ul>
+                                   <li><strong>Plano de Performance</strong> - Estratégias nutricionais para treino e
+                                        competição</li>
+                                   <li><strong>Ganho de Massa Muscular</strong> - Protocolo de hipertrofia</li>
+                                   <li><strong>Definição Muscular</strong> - Cutting com preservação de massa magra</li>
+                                   <li><strong>Suplementação</strong> - Orientação sobre uso adequado de suplementos
+                                   </li>
+                                   <li><strong>Timing Nutricional</strong> - Quando e o que comer antes, durante e após
+                                        treinos</li>
+                                   <li><strong>Hidratação</strong> - Estratégias de reposição hídrica e eletrolítica
+                                   </li>
+                              </ul>
+                         </div>
+                    </div>
+
+                    <!-- Categoria 3: Saúde Metabólica -->
+                    <div class="accordion-item">
+                         <button @click="activeCategory = activeCategory === 3 ? null : 3" class="accordion-header">
+                              <span>
+                                   <img src="./assets/icons/code.svg" class="icon" alt="">
+                                   Saúde Metabólica & Doenças Crônicas
+                              </span>
+                              <span x-text="activeCategory === 3 ? '−' : '+'"></span>
+                         </button>
+                         <div x-show="activeCategory === 3" x-collapse class="accordion-content">
+                              <p>
+                                   Tratamento nutricional especializado para prevenção e controle de doenças
+                                   metabólicas e crônicas através da alimentação.
+                              </p>
+
+                              <p class="content-title">O que inclui:</p>
+                              <ul>
+                                   <li><strong>Diabetes</strong> - Controle glicêmico e prevenção de complicações</li>
+                                   <li><strong>Hipertensão</strong> - Dieta DASH e redução de sódio</li>
+                                   <li><strong>Colesterol Alto</strong> - Manejo de dislipidemias</li>
+                                   <li><strong>Síndrome Metabólica</strong> - Abordagem integrada</li>
+                                   <li><strong>Resistência Insulínica</strong> - Estratégias para melhorar sensibilidade
+                                   </li>
+                                   <li><strong>SOP</strong> - Nutrição para síndrome dos ovários policísticos</li>
+                              </ul>
+                         </div>
+                    </div>
+               </div>
+
+               <div class="cta-container dual">
+                    <a href="#contato" class="btn-primary">
+                         <img src="./assets/icons/preview.svg" class="icon" alt="">
+                         Agendar Consulta
+                    </a>
+               </div>
+          </section>
+
+          <!-- CONTATO -->
+          <section id="contato" data-aos="fade-up">
+               <img src="./assets/img/img03.avif" class="section-avatar" alt="Contato" loading="lazy">
+               <h1>CONTATO & LOCALIZAÇÃO</h1>
+
+               <p class="form-intro">
+                    Agende sua consulta nutricional e dê o primeiro passo para transformar sua saúde.
+                    Atendimento presencial no consultório ou online, no conforto da sua casa.
+               </p>
+
+               <div class="social-links">
+
+                    <!-- WhatsApp -->
+                    <a href="https://wa.me/553132224455" target="_blank" rel="noopener noreferrer" class="social-link">
+                         <img src="./assets/icons/whatsapp.svg" class="icon" alt="WhatsApp">
+                         <span>(31) 3222-4455</span>
+                    </a>
+
+                    <!-- Email -->
+                    <a href="mailto:contato@draanapaula.com.br" class="social-link">
+                         <img src="./assets/icons/mail.svg" class="icon" alt="Email">
+                         <span>contato@draanapaula.com.br</span>
+                    </a>
+
+                    <!-- Instagram -->
+                    <a href="https://www.instagram.com/draanapaula.nutri/" target="_blank" rel="noopener noreferrer"
+                         class="social-link">
+                         <img src="./assets/icons/instagram.svg" class="icon" alt="Instagram">
+                         <span>@draanapaula.nutri</span>
+                    </a>
+
+                    <!-- Endereço -->
+                    <div class="social-link" style="cursor: default; opacity: 0.9;">
+                         <img src="./assets/icons/code.svg" class="icon" alt="Endereço">
+                         <span>Av. Afonso Pena, 1500 - Savassi, BH - MG</span>
+                    </div>
+
+               </div>
+
+               <div class="cta-container dual" style="margin-top: 2rem;">
+                    <a href="https://wa.me/553132224455?text=Olá!%20Gostaria%20de%20agendar%20uma%20consulta%20nutricional"
+                         target="_blank" rel="noopener noreferrer" class="btn-primary">
+                         <img src="./assets/icons/whatsapp.svg" class="icon" alt="">
+                         Agendar Consulta
+                    </a>
+               </div>
+          </section>
+
+     </main>
+
+     <!-- Footer -->
+     <footer>
+          <p>&copy; 2025 Dra. Ana Paula Nutrição | Belo Horizonte, MG</p>
+          <p style="font-size: 0.85rem; margin-top: 0.5rem; opacity: 0.8;">
+               Todos os direitos reservados | CRN-6 12.345 | CNPJ: 12.345.678/0001-90
+          </p>
+     </footer>
+
+     <!-- Scroll to Top Button -->
+     <button x-show="showScrollTop" @click="window.scrollTo({top: 0, behavior: 'smooth'})" x-transition
+          class="scroll-top" aria-label="Voltar ao topo">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+          </svg>
+     </button>
+
+     <!-- Scripts -->
+     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+     <script src="./script.js"></script>
+
+</body>
+
+</html>
