@@ -1,43 +1,45 @@
+// Main initialization
 document.addEventListener('DOMContentLoaded', () => {
-  console.log('🥗 Iniciando Dra. Ana Paula Nutrição...');
+  console.log('🥗 Dra. Ana Paula Nutrição - Inicializando...');
   
-  setTimeout(() => {
-    initAOS();
-    setupSmoothScroll();
-    initNutritionFeatures();
-    
-    console.log('✓ Dra. Ana Paula Nutrição totalmente inicializado');
-  }, 100);
+  initAOS();
+  setupSmoothScroll();
+  setupScrollEffects();
+  setupAreaToggles();
+  setupMobileMenu();
+  checkClinicHours();
+  
+  console.log('✓ Sistema totalmente carregado');
 });
 
+// Initialize AOS animations
 function initAOS() {
   if (typeof AOS !== 'undefined') {
     AOS.init({
-      duration: 800,
+      duration: 1000,
       easing: 'ease-out-cubic',
       once: true,
       offset: 100,
-      disable: false
+      disable: 'mobile'
     });
-    console.log('✓ Animações AOS inicializadas');
-  } else {
-    console.warn('⚠️ AOS não está disponível');
+    console.log('✓ Animações AOS ativadas');
   }
 }
 
+// Smooth scroll for anchor links
 function setupSmoothScroll() {
   document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
       const href = this.getAttribute('href');
       
-      if (href === '#' || href === null || href.length <= 1) return;
+      if (href === '#' || !href || href.length <= 1) return;
       
       e.preventDefault();
       
       const target = document.querySelector(href);
       
       if (target) {
-        const headerOffset = 80;
+        const headerOffset = 100;
         const elementPosition = target.getBoundingClientRect().top;
         const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
         
@@ -46,9 +48,12 @@ function setupSmoothScroll() {
           behavior: 'smooth'
         });
         
-        console.log(`✓ Scroll suave para: ${href}`);
-      } else {
-        console.warn(`⚠️ Target não encontrado: ${href}`);
+        // Close mobile menu if open
+        const mobileMenu = document.querySelector('.nav-links');
+        if (mobileMenu && mobileMenu.classList.contains('active')) {
+          mobileMenu.classList.remove('active');
+          document.querySelector('.mobile-menu-toggle').classList.remove('active');
+        }
       }
     });
   });
@@ -56,13 +61,121 @@ function setupSmoothScroll() {
   console.log('✓ Smooth scroll configurado');
 }
 
-function initNutritionFeatures() {
-  document.body.classList.add('nutrition-ready');
+// Scroll effects (header shadow, scroll-to-top button)
+function setupScrollEffects() {
+  const header = document.getElementById('header');
+  const scrollTop = document.getElementById('scrollTop');
+  let lastScroll = 0;
   
-  checkClinicHours();
-  initScrollSpy();
+  window.addEventListener('scroll', () => {
+    const currentScroll = window.pageYOffset;
+    
+    // Header shadow on scroll
+    if (currentScroll > 50) {
+      header.classList.add('scrolled');
+    } else {
+      header.classList.remove('scrolled');
+    }
+    
+    // Show/hide scroll-to-top button
+    if (currentScroll > 500) {
+      scrollTop.classList.add('visible');
+    } else {
+      scrollTop.classList.remove('visible');
+    }
+    
+    lastScroll = currentScroll;
+  });
+  
+  // Scroll to top button click
+  scrollTop.addEventListener('click', () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  });
+  
+  console.log('✓ Efeitos de scroll ativados');
 }
 
+// Area toggles (accordion)
+function setupAreaToggles() {
+  const toggleButtons = document.querySelectorAll('.area-toggle');
+  
+  toggleButtons.forEach(button => {
+    button.addEventListener('click', function() {
+      const area = this.getAttribute('data-area');
+      const content = document.getElementById(`${area}-content`);
+      
+      // Toggle active state
+      const isActive = this.classList.contains('active');
+      
+      // Close all other accordions
+      document.querySelectorAll('.area-toggle').forEach(btn => {
+        if (btn !== this) {
+          btn.classList.remove('active');
+          const otherArea = btn.getAttribute('data-area');
+          const otherContent = document.getElementById(`${otherArea}-content`);
+          if (otherContent) {
+            otherContent.classList.remove('active');
+          }
+        }
+      });
+      
+      // Toggle current accordion
+      if (isActive) {
+        this.classList.remove('active');
+        content.classList.remove('active');
+      } else {
+        this.classList.add('active');
+        content.classList.add('active');
+      }
+    });
+  });
+  
+  console.log('✓ Acordeões configurados');
+}
+
+// Mobile menu toggle
+function setupMobileMenu() {
+  const toggle = document.querySelector('.mobile-menu-toggle');
+  const menu = document.querySelector('.nav-links');
+  
+  if (toggle && menu) {
+    toggle.addEventListener('click', () => {
+      toggle.classList.toggle('active');
+      menu.classList.toggle('active');
+      
+      // Animate toggle icon
+      const spans = toggle.querySelectorAll('span');
+      if (toggle.classList.contains('active')) {
+        spans[0].style.transform = 'rotate(45deg) translateY(8px)';
+        spans[1].style.opacity = '0';
+        spans[2].style.transform = 'rotate(-45deg) translateY(-8px)';
+      } else {
+        spans[0].style.transform = 'none';
+        spans[1].style.opacity = '1';
+        spans[2].style.transform = 'none';
+      }
+    });
+    
+    // Close menu on outside click
+    document.addEventListener('click', (e) => {
+      if (!toggle.contains(e.target) && !menu.contains(e.target)) {
+        toggle.classList.remove('active');
+        menu.classList.remove('active');
+        const spans = toggle.querySelectorAll('span');
+        spans[0].style.transform = 'none';
+        spans[1].style.opacity = '1';
+        spans[2].style.transform = 'none';
+      }
+    });
+    
+    console.log('✓ Menu mobile configurado');
+  }
+}
+
+// Check clinic hours
 function checkClinicHours() {
   const now = new Date();
   const hour = now.getHours();
@@ -70,105 +183,150 @@ function checkClinicHours() {
   
   let isOpen = false;
   
-  // Segunda a Sexta: 08:00 - 19:00
+  // Monday to Friday: 08:00 - 19:00
   if (day >= 1 && day <= 5) {
     isOpen = hour >= 8 && hour < 19;
   }
   
-  if (isOpen) {
-    console.log('🥗 Consultório ABERTO!');
-  } else {
-    console.log('🏢 Consultório FECHADO. Agende pelo WhatsApp!');
+  const status = isOpen ? 'ABERTO' : 'FECHADO';
+  const emoji = isOpen ? '✅' : '🔒';
+  
+  console.log(`${emoji} Consultório ${status}`);
+  if (!isOpen) {
+    console.log('📱 Agende pelo WhatsApp a qualquer momento!');
   }
   
   return isOpen;
 }
 
-function initScrollSpy() {
+// Active navigation link based on scroll position
+function updateActiveNavLink() {
   const sections = document.querySelectorAll('section[id]');
-  const navLinks = document.querySelectorAll('nav a[href^="#"]');
+  const navLinks = document.querySelectorAll('.nav-link');
   
-  if (sections.length === 0 || navLinks.length === 0) {
-    console.warn('⚠️ ScrollSpy não inicializado');
-    return;
-  }
+  let current = '';
   
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          const id = entry.target.getAttribute('id');
-          
-          navLinks.forEach((link) => {
-            link.classList.remove('active');
-          });
-          
-          const activeLink = document.querySelector(`nav a[href="#${id}"]`);
-          if (activeLink) {
-            activeLink.classList.add('active');
-          }
-        }
-      });
-    },
-    {
-      threshold: 0.3,
-      rootMargin: '-80px 0px -60% 0px'
+  sections.forEach(section => {
+    const sectionTop = section.offsetTop;
+    const sectionHeight = section.clientHeight;
+    
+    if (window.pageYOffset >= sectionTop - 150) {
+      current = section.getAttribute('id');
     }
-  );
+  });
   
-  sections.forEach((section) => observer.observe(section));
-  
-  console.log('✓ ScrollSpy inicializado');
+  navLinks.forEach(link => {
+    link.classList.remove('active');
+    if (link.getAttribute('href') === `#${current}`) {
+      link.classList.add('active');
+    }
+  });
 }
 
-window.refreshAOS = function() {
-  if (typeof AOS !== 'undefined') {
-    AOS.refresh();
-    console.log('✓ AOS atualizado');
-  }
-};
+window.addEventListener('scroll', updateActiveNavLink);
 
-window.scrollToTop = function() {
-  window.scrollTo({
-    top: 0,
-    behavior: 'smooth'
-  });
-  console.log('✓ Scroll para o topo');
-};
-
-window.isOpen = function() {
-  return checkClinicHours();
-};
-
+// Performance monitoring
 window.addEventListener('load', () => {
   const loadTime = (performance.now() / 1000).toFixed(2);
-  console.log(`⚡ Dra. Ana Paula Nutrição carregado em ${loadTime}s`);
+  console.log(`⚡ Carregamento completo em ${loadTime}s`);
   
+  // Google Analytics event (if available)
   if (typeof gtag !== 'undefined') {
     gtag('event', 'page_load', {
-      'load_time': loadTime
+      'load_time': loadTime,
+      'page_type': 'nutrition_clinic'
     });
   }
 });
 
-function supportsWebP() {
-  const elem = document.createElement('canvas');
+// Handle resize events
+let resizeTimer;
+window.addEventListener('resize', () => {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(() => {
+    if (typeof AOS !== 'undefined') {
+      AOS.refresh();
+    }
+    console.log('✓ Layout atualizado');
+  }, 250);
+});
+
+// Parallax effect for hero image (subtle enhancement)
+function initParallax() {
+  const heroImage = document.querySelector('.hero-image img');
   
-  if (elem.getContext && elem.getContext('2d')) {
-    return elem.toDataURL('image/webp').indexOf('data:image/webp') === 0;
+  if (heroImage && window.innerWidth > 768) {
+    window.addEventListener('scroll', () => {
+      const scrolled = window.pageYOffset;
+      const rate = scrolled * 0.2;
+      
+      if (scrolled < 1000) {
+        heroImage.style.transform = `translateY(${rate}px)`;
+      }
+    });
+  }
+}
+
+// Call parallax if desired
+// initParallax();
+
+// Contact form validation (if form is added later)
+function validateContactForm(formData) {
+  const errors = [];
+  
+  if (!formData.name || formData.name.trim().length < 3) {
+    errors.push('Nome deve ter pelo menos 3 caracteres');
   }
   
-  return false;
+  if (!formData.email || !isValidEmail(formData.email)) {
+    errors.push('Email inválido');
+  }
+  
+  if (!formData.phone || !isValidPhone(formData.phone)) {
+    errors.push('Telefone inválido');
+  }
+  
+  if (!formData.message || formData.message.trim().length < 10) {
+    errors.push('Mensagem deve ter pelo menos 10 caracteres');
+  }
+  
+  return {
+    valid: errors.length === 0,
+    errors: errors
+  };
 }
 
-if (supportsWebP()) {
-  document.documentElement.classList.add('webp');
-  console.log('✓ Suporte a WebP detectado');
-} else {
-  document.documentElement.classList.add('no-webp');
-  console.log('⚠️ WebP não suportado');
+function isValidEmail(email) {
+  const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return regex.test(email);
 }
 
+function isValidPhone(phone) {
+  // Brazilian phone format
+  const regex = /^[\d\s\(\)\-\+]{10,}$/;
+  return regex.test(phone);
+}
+
+// BMI Calculator (utility function for potential feature)
+function calculateBMI(weight, height) {
+  // weight in kg, height in meters
+  const bmi = weight / (height * height);
+  
+  let category = '';
+  if (bmi < 18.5) category = 'Abaixo do peso';
+  else if (bmi < 25) category = 'Peso normal';
+  else if (bmi < 30) category = 'Sobrepeso';
+  else if (bmi < 35) category = 'Obesidade grau I';
+  else if (bmi < 40) category = 'Obesidade grau II';
+  else category = 'Obesidade grau III';
+  
+  return {
+    value: bmi.toFixed(1),
+    category: category
+  };
+}
+
+// Error handling
 window.addEventListener('error', (event) => {
   console.error('❌ Erro capturado:', event.error);
 });
@@ -176,3 +334,77 @@ window.addEventListener('error', (event) => {
 window.addEventListener('unhandledrejection', (event) => {
   console.error('❌ Promise rejeitada:', event.reason);
 });
+
+// Utility functions
+const nutritionUtils = {
+  // Smooth scroll to element
+  scrollTo: (elementId, offset = 100) => {
+    const element = document.getElementById(elementId);
+    if (element) {
+      const position = element.getBoundingClientRect().top + window.pageYOffset - offset;
+      window.scrollTo({
+        top: position,
+        behavior: 'smooth'
+      });
+    }
+  },
+  
+  // Check if element is in viewport
+  isInViewport: (element) => {
+    const rect = element.getBoundingClientRect();
+    return (
+      rect.top >= 0 &&
+      rect.left >= 0 &&
+      rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+      rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+    );
+  },
+  
+  // Debounce function
+  debounce: (func, wait) => {
+    let timeout;
+    return function executedFunction(...args) {
+      const later = () => {
+        clearTimeout(timeout);
+        func(...args);
+      };
+      clearTimeout(timeout);
+      timeout = setTimeout(later, wait);
+    };
+  },
+  
+  // Format phone number (Brazilian format)
+  formatPhone: (phone) => {
+    const cleaned = phone.replace(/\D/g, '');
+    if (cleaned.length === 11) {
+      return `(${cleaned.slice(0,2)}) ${cleaned.slice(2,7)}-${cleaned.slice(7)}`;
+    }
+    return phone;
+  },
+  
+  // Calculate BMI
+  calculateBMI: calculateBMI
+};
+
+// Export utils globally
+window.nutritionUtils = nutritionUtils;
+
+// Add custom event for appointment booking
+window.bookAppointment = function(specialty = 'geral') {
+  console.log(`📅 Solicitação de agendamento - Especialidade: ${specialty}`);
+  
+  // Track with analytics if available
+  if (typeof gtag !== 'undefined') {
+    gtag('event', 'appointment_request', {
+      'specialty': specialty,
+      'source': 'website'
+    });
+  }
+  
+  // Redirect to WhatsApp with pre-filled message
+  const phone = '553132224455';
+  const message = encodeURIComponent(`Olá! Gostaria de agendar uma consulta de ${specialty}.`);
+  window.open(`https://wa.me/${phone}?text=${message}`, '_blank');
+};
+
+console.log('🥗 Dra. Ana Paula Nutrição - Sistema pronto');
